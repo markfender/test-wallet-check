@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <title>Get wallet JS</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <h2>Get balance form:</h2>
+                    
+                    <form id="checkWalletForm">
+                        <div class="mb-3 row">
+                            <p>
+                                Address balance: <span id="ethBalance">0 ETH</span>
+                            </p>
+                        </div>
+                        <div class="mb-3 row">
+                            <input
+                                id="addressAccount"
+                                class="form-control"
+                                type="text"
+                                size="60"
+                                placeholder="Address: 0x0000000000000000000000000000000000000000"
+                            />
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="form-label">
+                                Network: 
+                                <select id="addressNetwork">
+                                <option value="mainnet" default selected>Mainnet</option>
+                                <option value="kovan">Kovan</option>
+                                <option value="rinkeby">Rinkeby</option>
+                                <option value="goerli">Gorli</option>
+                                <option value="ropsten">Ropsten</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="mb-3 row">
+                            <button type="submit" class="btn btn-primary">Get balance</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            document.getElementById("checkWalletForm").addEventListener('submit', function(event) {
+                event.preventDefault();
+                var address = document.getElementById("addressAccount").value;
+                var network = document.getElementById("addressNetwork").value;
+                document.getElementById("ethBalance").innerHTML = "Loading...";
+
+                axios.get("/wallet/" + network + "/" + address)
+                    .then(function (response) {
+                        document.getElementById("ethBalance").innerHTML = response.data['currentEthBalance'];
+                    })
+                    .catch(function (error) {
+                        document.getElementById("ethBalance").innerHTML = "Error";
+                    });
+            });
+        </script>
+    </body>
+</html>
